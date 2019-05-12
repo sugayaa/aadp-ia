@@ -1,4 +1,11 @@
-
+%é preciso definir o que é parede
+parede(-33).
+%setup %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+pertence(Elem, [Elem|_]).
+pertence(Elem, [_|Cauda]) :- pertence(Elem,Cauda).
+%%%%
+concatena([],L2,L2).
+concatena([Cab|Cauda], L2,[Cab|Resultado]) :- concatena(Cauda, L2, Resultado).
 aadp(X) :- not(parede(X)).
 %só para testes
 %parede(1).
@@ -8,10 +15,10 @@ aadp(X) :- not(parede(X)).
 %%%%%%%%
 %
 %
-s(X, Y, Largura, Comprimento) :-            Y is (X + 1), not((Largura - 1) =:= mod(X, Largura)), not(parede((Y)));
-                                            Y is (X - 1), not(0 =:= mod(X,Largura)), not(parede(Y));
-                                            Y is (X + Largura), not((Comprimento - 1) =:= div(X, Comprimento)), not(parede(Y));
-                                            Y is (X - Largura), not(0 =:= div(X,Comprimento)), not(parede(Y)).
+s(X, Y) :-   Y is (X + 1), not((10 - 1) =:= mod(X, 10)), not(parede((Y)));
+                    Y is (X - 1), not(0 =:= mod(X,10)), not(parede(Y));
+                    Y is (X + 10), not((5 - 1) =:= div(X, 5)), not(parede(Y));
+                    Y is (X - 10), not(0 =:= div(X,5)), not(parede(Y)).
 %
 %
 %%%%%%%
