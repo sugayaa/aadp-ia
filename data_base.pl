@@ -2,6 +2,16 @@
 conta([],0).
 conta([_|Cauda], N) :- conta(Cauda, N1), N is N1 + 1.
 
+elevador(2).
+elevador(12).
+elevador(22).
+elevador(32).
+elevador(42).
+sujeira(3).
+lixeira(4).
+%parede(6).
+%meta(7).
+
 %add final da lista
 add_ultimo(Elem,[ ],[Elem]).
 add_ultimo(Elem, [Cabeça|Cauda],[Cabeça|Cauda_Resultante]) :- add_ultimo(Elem,Cauda,Cauda_Resultante).
@@ -30,8 +40,8 @@ s(X, Y) :-          Y is (X + 1), not((10 - 1) =:= mod(X, 10)), not(parede((Y)))
 */
 copyList([],[]).
 copyList([Cab|Cauda],[Cab|Resultado]) :- copyList(Cauda,Resultado).
-sujeira(3).
-lixeira(4).
+%sujeira(3).
+%lixeira(4).
 
 esvazia([],[]).
 esvazia([_|Cauda],R) :- esvazia(Cauda, R).
@@ -41,8 +51,9 @@ coletarSujeira([X,AADP,Depositados], [Y, NewAADP, NewDepositados]) :- Y is X, co
 possoPegar(X) :- conta(X,N), N < 2.
 naoVazio(X) :- conta(X,N), N \== 0.
 vazio(X) :- conta(X,N), N == 0.
-staticEnvironment(A,B,C,D) :- copyList(A,C), copyList(B,D).
+staticEnv(A,B,C,D) :- copyList(A,C), copyList(B,D).
 
+/*
 s([X,AADP,Depositados], [Y, NewAADP, NewDepositados]) :-
                     %encontrou sujeira
                     Y is X, copyList(Depositados,NewDepositados),
@@ -56,18 +67,63 @@ s([X,AADP,Depositados], [Y, NewAADP, NewDepositados]) :-
                     %se encontrou lixeira e esvaziou, nao se move
 
                     %movimentacao
-                    Y is (X + 1), not((10 - 1) =:= mod(X, 10)), not(parede((Y))), staticEnvironment(Depositados, AADP, NewDepositados, NewAADP);
-                    Y is (X - 1), not(0 =:= mod(X,10)), not(parede(Y)), staticEnvironment(Depositados, AADP, NewDepositados, NewAADP);
-                    Y is (X + 10), not((5 - 1) =:= div(X, 5)), not(parede(Y)), staticEnvironment(Depositados, AADP, NewDepositados, NewAADP);
-                    Y is (X - 10), not(0 =:= div(X,5)), not(parede(Y)), staticEnvironment(Depositados, AADP, NewDepositados, NewAADP).
+                    Y is (X + 1), not((10 - 1) =:= mod(X, 10)), not(parede((Y))), staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+                    Y is (X - 1), not(0 =:= mod(X,10)), not(parede(Y)), staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+                    Y is (X + 10), not((5 - 1) =:= div(X, 5)), not(parede(Y)), staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+                    Y is (X - 10), not(0 =:= div(X,5)), not(parede(Y)), staticEnv(Depositados, AADP, NewDepositados, NewAADP).
+                */
 %
 %
 %%%%%%%
 
+plusEmpty(X,[[],X]).
+insere_primeira(X,Y,[X|Y]).
+
+
+
+s([[X|Caminho], AADP, Depositados], [[Y|NewCaminho], NewAADP, NewDepositados], Path) :-
+                    
+                    %encontrou sujeira
+                    Y is X, copyList(Depositados,NewDepositados),
+                    sujeira(X), not(pertence(X,AADP)), not(pertence(X,Depositados)),
+                    possoPegar(AADP), add_ultimo(X, AADP, NewAADP),
+                    concatena(Caminho,Path,Path),esvazia(Caminho,NewCaminho),!; %%%%%%%%%% adicionei isso aqui
+                    %se encontrou sujeira e ainda nao pegou, pega e nao se move
+                    
+                    %encontrou lixeira
+                    Y is X, concatena(Depositados,AADP,NewDepositados),
+                    lixeira(X), naoVazio(AADP), esvazia(AADP, NewAADP),
+                    concatena(Caminho,Path,Path), esvazia(Caminho,NewCaminho),!;
+                    %se encontrou lixeira e esvaziou, nao se move
+ 
+                    %movimentacao
+                    %esquerda
+                    Y is (X + 1), not((10 - 1) =:= mod(X, 10)),
+                    not(parede((Y))), insere_primeira(X,Caminho,NewCaminho),
+                    staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+
+                    %direita
+                    Y is (X - 1), not(0 =:= mod(X,10)),
+                    not(parede(Y)), insere_primeira(X,Caminho,NewCaminho),
+                    staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+
+                    %cima
+                    Y is (X + 10), not((5 - 1) =:= div(X, 5)),
+                    not(parede(Y)), elevador(Y), insere_primeira(X,Caminho,NewCaminho),
+                    staticEnv(Depositados, AADP, NewDepositados, NewAADP);
+
+                    %baixo
+                    Y is (X - 10), not(0 =:= div(X, 5)),
+                    not(parede(Y)), elevador(Y), insere_primeira(X,Caminho,NewCaminho),
+                    staticEnv(Depositados, AADP, NewDepositados, NewAADP).
+
+
 %my3([X1,X2,X3],[Y1,Y2,Y3]) :- Y1 is X1 + 1, Y2 is X2 + 1, Y3 is X3 + 1.
 sucessores(X,L) :- bagof(Y, s(X,Y,4,4),L),not(parede(X)).
 
-estende([[Posicao|Caminho], AADP, Depositados],ListaSucessores):- bagof([[NewPosicao,Posicao|Caminho],NewAADP,NewDepositados],  (s([Posicao,AADP,Depositados],[NewPosicao,NewAADP,NewDepositados]),not(pertence(NewPosicao,Caminho))), ListaSucessores),!.
+%estende([[Posicao|Caminho], AADP, Depositados],ListaSucessores):- bagof([[NewPosicao,Posicao|Caminho],NewAADP,NewDepositados],  (s([Posicao,AADP,Depositados],[NewPosicao,NewAADP,NewDepositados]),not(pertence(NewPosicao,Caminho))), ListaSucessores),!.
+
+estende([[Posicao|Caminho], AADP, Depositados,Path],ListaSucessores):- bagof([[NewPosicao|NewCaminho],NewAADP,NewDepositados,Path],(s([[Posicao|Caminho],AADP,Depositados],[[NewPosicao|NewCaminho],NewAADP,NewDepositados], Path),not(pertence(NewPosicao,NewCaminho))), ListaSucessores),!.
 estende(_,[]).
 %estende([[Estado|Caminho]|Ambiente],ListaSucessores):- bagof([[Sucessor,Estado|Caminho]|Ambiente],  (s(Estado,Sucessor),not(pertence(Sucessor,[Estado|Caminho]))), ListaSucessores),!.
 
@@ -85,8 +141,11 @@ solucao_bl(Inicial,Solucao) :- bl([[[Inicial],[],[]]],Solucao).
 %essa tranqueira de notação é para pegarmos a primeira lista de F, cada lista de F contem o estado atual, e o caminho até ele
 %no caso da primeira iteração tem uma lista = [posição_inicial| [] ] <- coloquei a lista vazia só para ficar mais claro
 %bl([[Estado|Caminho]|_],[Estado|Caminho]) :- meta(Estado).
-bl([[[Posicao|Caminho],AADP,Depositado]|_],[[Posicao|Caminho],AADP,Depositado]) :- meta([Posicao,AADP,Depositado]).
+%coloquei path
+%bl([[[Posicao|Caminho],AADP,Depositado,Path]|_],[[Posicao|Caminho],AADP,Depositado]) :- meta([Posicao,AADP,Depositado]).
+bl([[[Posicao|Caminho],AADP,Depositado,Path]|_],[FinalPath,AADP,Depositado]) :- meta([Posicao,AADP,Depositado]), concatena([Posicao|Caminho],Path,FinalPath).
 %verifica se é a meta
+
 
 bl([Primeiro|Outros], Solucao) :- estende(Primeiro,Sucessores), concatena(Outros,Sucessores,NovaFronteira), bl(NovaFronteira,Solucao).
 %bl([Primeiro|Outros], Solucao) :- estende(Primeiro,Sucessores), concatena(Outros,Sucessores,NovaFronteira), bl(NovaFronteira,Solucao).
