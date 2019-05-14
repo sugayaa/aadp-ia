@@ -1,3 +1,8 @@
+:- set_prolog_flag(answer_write_options,
+                   [ quoted(true),
+                     portray(true),
+                     spacing(next_argument)
+                   ]).
 %conta
 conta([],0).
 conta([_|Cauda], N) :- conta(Cauda, N1), N is N1 + 1.
@@ -14,6 +19,7 @@ elevador(37).
 elevador(47).
 
 sujeira(3).
+sujeira(46).
 lixeira(4).
 parede(6).
 parede(-33).
@@ -204,7 +210,7 @@ estende2(_,[]).
 
 
 
-meta([7,A,L]) :- vazio(A), conta(L,N), 1 is N.
+meta([7,A,L]) :- vazio(A), conta(L,N), 2 is N.
 %aqui bobona
 %solucao_bl(Inicial,Solucao) :- bl([[Inicial]],Solucao).
 solucao_bl(Inicial,Solucao)  :-  bl([[[Inicial],[],[]]],Solucao).
