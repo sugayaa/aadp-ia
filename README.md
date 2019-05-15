@@ -11,8 +11,13 @@ O cenário possui:
 - Dockstation, local em que o agente deve terminar.
 - Agente não pode carregar mais de 2 sujeiras.
 
-####Prolog Query Example.
+
+#
+
+###Prolog Query Example.
+
 `?- bl_solucao(0, Solucao).`
 Nesse exemplo agente começa na posição 0.
 
-###Autores: Sugaya e bobona.
+#
+##Autores: Sugaya e bobona.
