@@ -21,7 +21,7 @@ s([[X|Caminho], AADP, Depositados, Path], [[Y|NewCaminho], NewAADP, NewDepositad
                     %movimentacao
                     %esquerda
                     Y is (X + 1), not((10 - 1) =:= mod(X, 10)),
-                    not(parede((Y))), insere_primeira(X,Caminho,NewCaminho),
+                    not(parede(Y)), insere_primeira(X,Caminho,NewCaminho),
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath);
 
                     %direita
@@ -30,12 +30,12 @@ s([[X|Caminho], AADP, Depositados, Path], [[Y|NewCaminho], NewAADP, NewDepositad
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath);
 
                     %cima
-                    Y is (X + 10), not((5 - 1) =:= div(X, 5)),
+                    Y is (X + 10), Y =< 49,
                     not(parede(Y)), elevador(Y), insere_primeira(X,Caminho,NewCaminho),
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath);
 
                     %baixo
-                    Y is (X - 10), not(0 =:= div(X, 5)),
+                    Y is (X - 10), Y >= 0,
                     not(parede(Y)), elevador(Y), insere_primeira(X,Caminho,NewCaminho),
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath).
 
@@ -46,7 +46,7 @@ estende(_,[]).
 
 
 %definição de meta
-meta([7,A,L]) :- vazio(A), conta(L,N), 2 is N.
+meta([6,A,L]) :- vazio(A), conta(L,N), 3 is N.
 
 
 %busca em largura
