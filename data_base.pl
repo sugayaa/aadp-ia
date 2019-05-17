@@ -49,10 +49,10 @@ estende(_,[]).
 
 
 %definição de meta
-meta([6,A,L]) :- vazio(A), conta(L,N), 3 is N.
+meta([D,A,L]) :- vazio(A), sujeira(S), conta(S, NS), conta(L,N), NS is N, docker(D).
 
 
-%busca em largura
+%busca em 
 solucao_bl(Inicial,[SolucaoInvertida, AADP, Depositados]) :- bl([[[Inicial],[],[],[]]],[Solucao, AADP, Depositados]), inverte(Solucao,SolucaoInvertida).
 bl([[[Posicao|Caminho], AADP,Depositado,Path]|_],[FinalPath,AADP,Depositado]) :- meta([Posicao,AADP,Depositado]), concatena([Posicao|Caminho], Path, FinalPath).
 bl([Primeiro|Outros], Solucao) :- estende(Primeiro,Sucessores), concatena(Outros,Sucessores,NovaFronteira), bl(NovaFronteira,Solucao).
