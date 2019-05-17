@@ -10,12 +10,15 @@ s([[X|Caminho], AADP, Depositados, Path], [[Y|NewCaminho], NewAADP, NewDepositad
                     Y is X, copyList(Depositados,NewDepositados), sujeira(S),
                     pertence(X, S), not(pertence(X,AADP)), not(pertence(X,Depositados)),
                     possoPegar(AADP), add_ultimo(X, AADP, NewAADP),
-                    concatena(Caminho,Path,NewPath),esvazia(Caminho,NewCaminho),!;
+                    concatena([X|Caminho],Path,NewPath),esvazia(Caminho,NewCaminho),!;
+                    %concatena(Caminho,Path,NewPath),esvazia(Caminho,NewCaminho),!;
                     
                     %encontrou lixeira
                     Y is X, concatena(Depositados,AADP,NewDepositados), lixeira(L),
                     pertence(X, L), naoVazio(AADP), esvazia(AADP, NewAADP),
-                    concatena(Caminho,Path,NewPath), esvazia(Caminho,NewCaminho),!;
+                    %concatena(Caminho,Path,NewPath), esvazia(Caminho,NewCaminho),!;
+                    concatena([X|Caminho],Path,NewPath), esvazia(Caminho,NewCaminho),!;
+
                     
  
                     %movimentacao
@@ -50,6 +53,6 @@ meta([6,A,L]) :- vazio(A), conta(L,N), 3 is N.
 
 
 %busca em largura
-solucao_bl(Inicial,Solucao) :- bl([[[Inicial],[],[],[]]],Solucao).
+solucao_bl(Inicial,[SolucaoInvertida, AADP, Depositados]) :- bl([[[Inicial],[],[],[]]],[Solucao, AADP, Depositados]), inverte(Solucao,SolucaoInvertida).
 bl([[[Posicao|Caminho], AADP,Depositado,Path]|_],[FinalPath,AADP,Depositado]) :- meta([Posicao,AADP,Depositado]), concatena([Posicao|Caminho], Path, FinalPath).
 bl([Primeiro|Outros], Solucao) :- estende(Primeiro,Sucessores), concatena(Outros,Sucessores,NovaFronteira), bl(NovaFronteira,Solucao).
