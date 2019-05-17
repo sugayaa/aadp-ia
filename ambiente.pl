@@ -6,4 +6,4 @@ lixeira([45]).
 
 parede([5,25,12,44]).
 
-docker(6).
+dock(6).

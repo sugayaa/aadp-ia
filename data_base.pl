@@ -1,5 +1,5 @@
 :- [prolog_flags].
-:- [ambiente].
+:- [ambiente4].
 :- [funcoes].
 
 
@@ -34,12 +34,14 @@ s([[X|Caminho], AADP, Depositados, Path], [[Y|NewCaminho], NewAADP, NewDepositad
 
                     %cima
                     Y is (X + 10), Y =< 49, parede(P), elevador(E),
-                    not(pertence(Y, P)), pertence(Y, E), insere_primeira(X,Caminho,NewCaminho),
+                    not(pertence(Y, P)), pertence(Y, E), pertence(X, E), 
+                    insere_primeira(X,Caminho,NewCaminho),
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath);
 
                     %baixo
                     Y is (X - 10), Y >= 0, parede(P), elevador(E),
-                    not(pertence(Y, P)), pertence(Y, E), insere_primeira(X,Caminho,NewCaminho),
+                    not(pertence(Y, P)), pertence(Y, E), pertence(X, E), 
+                    insere_primeira(X,Caminho,NewCaminho),
                     staticEnv(Depositados, AADP, Path, NewDepositados, NewAADP, NewPath).
 
 
@@ -49,7 +51,7 @@ estende(_,[]).
 
 
 %definição de meta
-meta([D,A,L]) :- vazio(A), sujeira(S), conta(S, NS), conta(L,N), NS is N, docker(D).
+meta([D,A,L]) :- vazio(A), sujeira(S), conta(S, NS), conta(L,N), NS is N, dock(D).
 
 
 %busca em 
