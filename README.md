@@ -16,4 +16,3 @@ O cenário possui:
 `?- bl_solucao(0, Solucao).`
 Nesse exemplo agente começa na posição 0.
 
-## Autores: Sugaya e bobona.
