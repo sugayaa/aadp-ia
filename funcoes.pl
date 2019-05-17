@@ -48,3 +48,8 @@ staticEnv(A,B,C,D,E,F) :- copyList(A,D), copyList(B,E), copyList(C,F).
 
 %insere um elemento na cabeça da uma lista, retorna numa outra lista
 insere_primeira(X,Y,[X|Y]).
+
+
+%inverte lista
+inverte([],[]).
+inverte([X|Y],Z) :- inverte(Y,Inversa),concatena(Inversa,[X],Z).
